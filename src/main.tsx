@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import store from './store';
 import '@telegram-apps/telegram-ui/dist/styles.css';
+import Welcome from './views/Welcome/Welcome';
 
 // this manifest is used temporarily for development purposes
 const manifestUrl = 'https://grusha229.github.io/favs-telegram/tonconnect-manifest.json';
@@ -18,20 +19,16 @@ const router = createBrowserRouter([
     path: `${basePathname}`,
     element: <App/>,
     children: [
-      // {
-      //   path: `${basePathname}`,
-      //   element: <WelcomePage/>,
-      // },
-      // {
-      //   path: `${basePathname}city`,
-      //   element: <CityPage/>
-      // },
+      {
+        path: `${basePathname}`,
+        element: <Welcome />,
+      },
     ]
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  
+
     <TonConnectUIProvider manifestUrl={manifestUrl}>
         <Provider store={store}>
           <React.StrictMode>
