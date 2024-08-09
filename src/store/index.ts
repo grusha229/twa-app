@@ -1,4 +1,4 @@
-import AuthSlice, { IAuthState } from './features/authSlice';
+import AuthSlice from './features/authSlice';
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 
 const rootReducer = combineReducers({

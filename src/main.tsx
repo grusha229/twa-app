@@ -5,9 +5,7 @@ import { TonConnectUIProvider } from '@tonconnect/ui-react';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import WelcomePage from './views/WelcomePage/WelcomePage';
 import store from './store';
-import { AppRoot } from '@telegram-apps/telegram-ui';
 import '@telegram-apps/telegram-ui/dist/styles.css';
 
 // this manifest is used temporarily for development purposes
@@ -20,10 +18,10 @@ const router = createBrowserRouter([
     path: `${basePathname}`,
     element: <App/>,
     children: [
-      {
-        path: `${basePathname}`,
-        element: <WelcomePage/>,
-      },
+      // {
+      //   path: `${basePathname}`,
+      //   element: <WelcomePage/>,
+      // },
       // {
       //   path: `${basePathname}city`,
       //   element: <CityPage/>
