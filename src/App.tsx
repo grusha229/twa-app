@@ -1,40 +1,40 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import twaLogo from './assets/tapps.png'
-import viteLogo from '/vite.svg'
 import './App.css'
+import { Outlet } from 'react-router-dom';
+import '@telegram-apps/telegram-ui/dist/styles.css';
+import { AppRoot } from '@telegram-apps/telegram-ui';
+import { retrieveLaunchParams, SDKProvider } from '@tma.js/sdk-react';
 
 import WebApp from '@twa-dev/sdk'
+import { useDispatch, useSelector } from 'react-redux';
+import { setInitDataRaw } from './store/features/authSlice';
+import { useEffect } from 'react';
+import { RootState } from './store';
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const dispatch = useDispatch();
+  const storedInitDataRaw = useSelector((state: RootState) => state.authentication.initDataRaw)
+
+  useEffect(() => {
+    const { initDataRaw } = retrieveLaunchParams();
+    dispatch(setInitDataRaw(initDataRaw));
+  }, [dispatch]);
+
+  if (storedInitDataRaw) {
+    WebApp.showPopup({
+      title: 'Оп',
+      message: storedInitDataRaw,
+    })
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://ton.org/dev" target="_blank">
-          <img src={twaLogo} className="logo" alt="TWA logo" />
-        </a>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <AppRoot>
+    <SDKProvider acceptCustomStyles debug>
+      <div className='App'>
+        <Outlet />
       </div>
-      <h1>TWA + Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-      </div>
-      {/*  */}
-      <div className="card">
-        <button onClick={() => WebApp.showAlert(`Hello World! Current count is ${count}`)}>
-            Show Alert
-        </button>
-      </div>
-    </>
+    </SDKProvider>
+  </AppRoot>
   )
 }
 
