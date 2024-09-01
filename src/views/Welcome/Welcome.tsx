@@ -11,23 +11,23 @@ import { setInitDataRaw } from '../../store/features/authSlice';
 export default function Welcome() {
   const dispatch = useDispatch();
 
-  const { initDataRaw } = retrieveLaunchParams();
+  // const { initDataRaw } = retrieveLaunchParams();
 
-  const storedInitDataRaw = useSelector((state: RootState) => state.authentication.initDataRaw)
+  // const storedInitDataRaw = useSelector((state: RootState) => state.authentication.initDataRaw)
 
-  useEffect(() => {
-    dispatch(setInitDataRaw(initDataRaw));
-  }, [initDataRaw]);
+  // useEffect(() => {
+  //   dispatch(setInitDataRaw(initDataRaw));
+  // }, [initDataRaw]);
 
-  if (storedInitDataRaw) {
-    return <h2>Loading...</h2>
-  }
+  // if (storedInitDataRaw) {
+  //   return <h2>Loading...</h2>
+  // }
 
   const onClick = useCallback(() => {
 
     WebApp.showPopup({
       title: 'Оп',
-      message: storedInitDataRaw,
+      message: 'hey!',
     })
 
   },[])
