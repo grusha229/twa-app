@@ -1,21 +1,21 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit'
 
 export interface IAuthState {
-    initDataRaw: string;
-  }
+  initDataRaw: string
+}
 
 const initialState: IAuthState = {
-    initDataRaw: '',
+  initDataRaw: ''
 }
 
 export const AuthSlice = createSlice({
-    name: "launchParams",
-    initialState,
-    reducers: {
-        setInitDataRaw: (state, action) => {
-            state.initDataRaw = action.payload
-        },
+  name: 'launchParams',
+  initialState,
+  reducers: {
+    setInitDataRaw: (state, action) => {
+      state.initDataRaw = action.payload
     }
+  }
 })
 
 export const { setInitDataRaw } = AuthSlice.actions
