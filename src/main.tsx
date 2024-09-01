@@ -8,6 +8,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import store from './store'
 import '@telegram-apps/telegram-ui/dist/styles.css'
 import Welcome from './views/Welcome/Welcome'
+import ErrorBoundary from './views/ErrorFallback/ErrorBoundary'
 
 // this manifest is used temporarily for development purposes
 const manifestUrl = 'https://grusha229.github.io/favs-telegram/tonconnect-manifest.json'
@@ -16,16 +17,29 @@ const basePathname = import.meta.env.BASE_URL
 
 const router = createBrowserRouter([
   {
-    path: `${basePathname}`,
-    element: <App/>,
+    path: basePathname,
+    element: (
+      <ErrorBoundary>
+        <App />
+      </ErrorBoundary>
+    ),
+    errorElement: (
+      <ErrorBoundary>
+        <div>Произошла ошибка в маршруте!</div>
+      </ErrorBoundary>
+    ), 
     children: [
       {
-        path: `${basePathname}`,
-        element: <Welcome />
+        path: basePathname,
+        element: (
+          <ErrorBoundary>
+            <Welcome />
+          </ErrorBoundary>
+        )
       }
     ]
   }
-])
+]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 
