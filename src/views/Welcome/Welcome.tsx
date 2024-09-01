@@ -1,6 +1,5 @@
 import '@twa-dev/sdk';
 import { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
 import styles from './Welcome.module.scss';
 import laptopGif from './../../assets/laptop--image.gif';
 import WebApp from '@twa-dev/sdk';
