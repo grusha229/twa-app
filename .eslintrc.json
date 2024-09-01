@@ -25,6 +25,7 @@
             }
           ],
           "@typescript-eslint/no-non-null-assertion": "warn",
-          "@typescript-eslint/triple-slash-reference": "warn"
+          "@typescript-eslint/triple-slash-reference": "warn",
+          "react/react-in-jsx-scope": "off"
     }
 }

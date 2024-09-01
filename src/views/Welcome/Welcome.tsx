@@ -1,5 +1,5 @@
 import WebApp from '@twa-dev/sdk'
-import React, { useCallback, useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styles from './Welcome.module.scss'
 import laptopGif from './../../assets/laptop--image.gif'
