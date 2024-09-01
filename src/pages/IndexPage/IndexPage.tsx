@@ -1,11 +1,24 @@
 import { Section, Cell, Image, List } from '@telegram-apps/telegram-ui';
 import type { FC } from 'react';
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useInitData, useLaunchParams, type User } from '@telegram-apps/sdk-react';
 
 import { Link } from '@/components/Link/Link.tsx';
 
 import tonSvg from './ton.svg';
+import { RootState } from '@/store';
+import { setInitDataRaw } from '@/store/features/authSlice';
 
 export const IndexPage: FC = () => {
+  const dispatch = useDispatch()
+
+  const initDataRaw = useLaunchParams().initDataRaw;
+
+  useEffect(() => {
+    dispatch(setInitDataRaw(initDataRaw))
+  }, [setInitDataRaw])
+
   return (
     <List>
       <Section

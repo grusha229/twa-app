@@ -1,0 +1,836 @@
+basePath: /api/v1
+definitions:
+  models.AgeRange:
+    properties:
+      max:
+        type: integer
+      min:
+        type: integer
+    type: object
+  models.Authentication:
+    properties:
+      email:
+        type: string
+      photo_url:
+        type: string
+      provider_id:
+        type: string
+      uid:
+        type: string
+    type: object
+  models.Location:
+    properties:
+      city:
+        example: New York
+        type: string
+      street:
+        example: 5th Avenue
+        type: string
+    type: object
+  models.Meeting:
+    properties:
+      awaiting:
+        items:
+          $ref: '#/definitions/models.ProfileLightView'
+        type: array
+      blocked:
+        items:
+          $ref: '#/definitions/models.ProfileLightView'
+        type: array
+      description:
+        type: string
+      id:
+        type: string
+      location:
+        $ref: '#/definitions/models.Location'
+      owner:
+        $ref: '#/definitions/models.ProfileLightView'
+      participants:
+        items:
+          $ref: '#/definitions/models.ProfileLightView'
+        type: array
+      restriction:
+        $ref: '#/definitions/models.Restrictions'
+      schedule:
+        $ref: '#/definitions/models.Schedule'
+      status:
+        $ref: '#/definitions/models.MeetingStatus'
+      title:
+        type: string
+    type: object
+  models.MeetingFilter:
+    properties:
+      location:
+        $ref: '#/definitions/models.Location'
+      restriction:
+        $ref: '#/definitions/models.Restrictions'
+      status:
+        $ref: '#/definitions/models.MeetingStatus'
+      title:
+        type: string
+    type: object
+  models.MeetingPatch:
+    properties:
+      approve_participants:
+        description: Participants to add to the meeting as approved
+        items:
+          $ref: '#/definitions/models.ProfileLightView'
+        type: array
+      awaiting_participants:
+        description: Participants to add to the meeting as awaiting approval
+        items:
+          $ref: '#/definitions/models.ProfileLightView'
+        type: array
+      block_participants:
+        description: Participants to add to the meeting as blocked
+        items:
+          $ref: '#/definitions/models.ProfileLightView'
+        type: array
+      description:
+        type: string
+      location:
+        $ref: '#/definitions/models.Location'
+      restriction:
+        $ref: '#/definitions/models.Restrictions'
+      schedule:
+        $ref: '#/definitions/models.Schedule'
+      status:
+        $ref: '#/definitions/models.MeetingStatus'
+      title:
+        type: string
+    type: object
+  models.MeetingStatus:
+    enum:
+    - scheduled
+    - in_progress
+    - finished
+    - cancelled
+    type: string
+    x-enum-varnames:
+    - MeetingStatusScheduled
+    - MeetingStatusInProgress
+    - MeetingStatusFinished
+    - MeetingStatusCancelled
+  models.PaginatedMeetings:
+    properties:
+      meetings:
+        items:
+          $ref: '#/definitions/models.Meeting'
+        type: array
+      next:
+        type: string
+      page:
+        type: integer
+      page_size:
+        type: integer
+      previous:
+        type: string
+      total:
+        type: integer
+    type: object
+  models.ProfessionalField:
+    enum:
+    - Software Development
+    - Data Science
+    - Design
+    - Product Management
+    - Marketing
+    - Sales
+    - Customer Support
+    - Finance
+    - Human Resources
+    - Operations
+    - Architecture
+    - Law
+    - Education
+    - All
+    type: string
+    x-enum-varnames:
+    - ProfessionalFieldSoftwareEngineer
+    - ProfessionalFieldDataScientist
+    - ProfessionalFieldDesigner
+    - ProfessionalFieldProductManager
+    - ProfessionalFieldMarketing
+    - ProfessionalFieldSales
+    - ProfessionalFieldCustomerSupport
+    - ProfessionalFieldFinance
+    - ProfessionalFieldHumanResources
+    - ProfessionalFieldOperations
+    - ProfessionalFieldArchitecture
+    - ProfessionalFieldLaw
+    - ProfessionalFieldEducation
+    - ProfessionalFieldAll
+  models.Profile:
+    properties:
+      about:
+        type: string
+      age:
+        type: integer
+      authentication:
+        $ref: '#/definitions/models.Authentication'
+      avatars:
+        items:
+          type: string
+        type: array
+      id:
+        type: string
+      interests:
+        items:
+          $ref: '#/definitions/models.ProfessionalField'
+        type: array
+      links:
+        items:
+          type: string
+        type: array
+      location:
+        type: string
+      name:
+        type: string
+      occupation:
+        $ref: '#/definitions/models.ProfessionalField'
+      sex:
+        type: string
+      surname:
+        type: string
+    type: object
+  models.ProfileLightView:
+    properties:
+      avatar:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      surname:
+        type: string
+    type: object
+  models.ProfilePatch:
+    properties:
+      about:
+        type: string
+      age:
+        type: integer
+      avatar_to_add:
+        type: string
+      avatar_to_remove:
+        type: string
+      interests:
+        items:
+          $ref: '#/definitions/models.ProfessionalField'
+        type: array
+      links:
+        items:
+          type: string
+        type: array
+      location:
+        type: string
+      name:
+        type: string
+      occupation:
+        $ref: '#/definitions/models.ProfessionalField'
+      sex:
+        type: string
+      surname:
+        type: string
+    type: object
+  models.Restrictions:
+    properties:
+      age_range:
+        $ref: '#/definitions/models.AgeRange'
+      capacity:
+        type: integer
+      professional_field:
+        items:
+          $ref: '#/definitions/models.ProfessionalField'
+        type: array
+    type: object
+  models.Schedule:
+    properties:
+      date:
+        example: "2021-01-01"
+        type: string
+      end_time:
+        example: "2021-01-01T13:00:00Z"
+        type: string
+      start_time:
+        example: "2021-01-01T12:00:00Z"
+        type: string
+    type: object
+host: api.blump.world
+info:
+  contact: {}
+  title: Blump profiles API
+  version: "1.0"
+paths:
+  /meetings:
+    get:
+      consumes:
+      - application/json
+      description: Get meetings
+      parameters:
+      - description: Filter object
+        in: body
+        name: filter
+        required: true
+        schema:
+          $ref: '#/definitions/models.MeetingFilter'
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.PaginatedMeetings'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: Get meetings
+      tags:
+      - meetings
+    post:
+      consumes:
+      - application/json
+      description: Create a new meeting
+      parameters:
+      - description: Meeting object that needs to be created
+        in: body
+        name: meeting
+        required: true
+        schema:
+          $ref: '#/definitions/models.Meeting'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Meeting'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "409":
+          description: Conflict
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: Create a new meeting
+      tags:
+      - meetings
+  /meetings/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a meeting
+      parameters:
+      - description: Meeting ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: Delete a meeting
+      tags:
+      - meetings
+    get:
+      consumes:
+      - application/json
+      description: Get meeting by ID
+      parameters:
+      - description: Meeting ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Meeting'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: Get meeting by ID
+      tags:
+      - meetings
+    patch:
+      consumes:
+      - application/json
+      description: Update a meeting
+      parameters:
+      - description: Meeting ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Meeting object that needs to be updated
+        in: body
+        name: patch
+        required: true
+        schema:
+          $ref: '#/definitions/models.MeetingPatch'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Meeting'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: Update a meeting
+      tags:
+      - meetings
+  /meetings/search:
+    post:
+      consumes:
+      - application/json
+      description: Search meetings
+      parameters:
+      - description: Title
+        in: query
+        name: title
+        type: string
+      - description: City
+        in: query
+        name: city
+        type: string
+      - description: Street
+        in: query
+        name: street
+        type: string
+      - description: Minimum age
+        in: query
+        name: ageMin
+        type: integer
+      - description: Maximum age
+        in: query
+        name: ageMax
+        type: integer
+      - description: Capacity
+        in: query
+        name: capacity
+        type: integer
+      - description: Interests
+        in: query
+        name: interests
+        type: array
+      - description: Status
+        in: query
+        name: status
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.PaginatedMeetings'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: Search meetings
+      tags:
+      - meetings
+  /profiles:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a profile
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Profile deleted successfully
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: Delete a profile
+      tags:
+      - profiles
+    patch:
+      consumes:
+      - application/json
+      description: Update a profile
+      parameters:
+      - description: Profile object that needs to be updated
+        in: body
+        name: patch
+        required: true
+        schema:
+          $ref: '#/definitions/models.ProfilePatch'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Profile'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: Update a profile
+      tags:
+      - profiles
+    post:
+      consumes:
+      - application/json
+      description: Create a new profile
+      parameters:
+      - description: Profile object that needs to be created
+        in: body
+        name: profile
+        required: true
+        schema:
+          $ref: '#/definitions/models.Profile'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Profile'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "409":
+          description: Conflict
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: Create a new profile
+      tags:
+      - profiles
+  /profiles/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get a profile
+      parameters:
+      - description: Profile ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Profile'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: Get a profile
+      tags:
+      - profiles
+  /profiles/photo:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Insert a profile photo
+      parameters:
+      - description: Photo to be uploaded
+        in: formData
+        name: photo
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: URL of the uploaded photo
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: Insert a profile photo
+      tags:
+      - profiles
+  /profiles/photo/{photo}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a profile photo
+      parameters:
+      - description: Photo to be deleted
+        in: path
+        name: photo
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Profile photo deleted successfully
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: Delete a profile photo
+      tags:
+      - profiles
+security:
+- BearerAuth: []
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
