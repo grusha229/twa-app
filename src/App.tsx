@@ -2,7 +2,7 @@ import './App.css'
 import { Outlet } from 'react-router-dom';
 import '@telegram-apps/telegram-ui/dist/styles.css';
 import { AppRoot } from '@telegram-apps/telegram-ui';
-import { SDKProvider } from '@tma.js/sdk-react';
+import { SDKProvider } from '@telegram-apps/sdk-react';
 
 function App() {
   return (

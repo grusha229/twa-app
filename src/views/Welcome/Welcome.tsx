@@ -3,7 +3,7 @@ import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './Welcome.module.scss';
 import laptopGif from './../../assets/laptop--image.gif';
-import { retrieveLaunchParams } from '@tma.js/sdk-react';
+import { retrieveLaunchParams } from '@telegram-apps/sdk-react';
 import WebApp from '@twa-dev/sdk';
 import { RootState } from '../../store';
 import { setInitDataRaw } from '../../store/features/authSlice';
